@@ -1,0 +1,6 @@
+# Heretic adapter config — copy to config.toml and fill in.
+[heretic]
+enabled = false
+license = "AGPL-3.0"
+# ⚠ Abliteration is OFF by default and requires explicit consent.
+consent_acknowledged = false

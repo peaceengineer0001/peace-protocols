@@ -1,0 +1,4 @@
+# Scrapling adapter config — copy to config.toml and fill in.
+[scrapling]
+enabled = true
+license = "BSD-3-Clause"

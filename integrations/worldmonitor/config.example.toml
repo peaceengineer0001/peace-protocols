@@ -1,0 +1,4 @@
+# World Monitor adapter config — copy to config.toml and fill in.
+[worldmonitor]
+enabled = true
+license = "AGPL-3.0"

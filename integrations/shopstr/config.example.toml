@@ -1,0 +1,4 @@
+# Shopstr adapter config — copy to config.toml and fill in.
+[shopstr]
+enabled = true
+license = "GPL-3.0"

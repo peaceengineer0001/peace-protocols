@@ -1,0 +1,5 @@
+# VoxCPM adapter config — copy to config.toml and fill in.
+[voxcpm]
+enabled = true
+license = "Apache-2.0"
+endpoint = "http://127.0.0.1:8632"

@@ -1,0 +1,5 @@
+# CADAM adapter config — copy to config.toml and fill in.
+[cadam]
+enabled = true
+license = "GPL-3.0"
+endpoint = "http://127.0.0.1:8646"

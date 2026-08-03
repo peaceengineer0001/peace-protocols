@@ -1,0 +1,8 @@
+# LND (Lightning Network Daemon) adapter config — copy to config.toml and fill in.
+[lnd]
+enabled = true
+license = "MIT"
+endpoint = "http://127.0.0.1:8080"
+rest_host = "https://127.0.0.1:8080"
+macaroon_path = "~/.lnd/data/chain/bitcoin/mainnet/admin.macaroon"
+tls_cert_path = "~/.lnd/tls.cert"

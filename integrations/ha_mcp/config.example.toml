@@ -1,0 +1,7 @@
+# Home Assistant MCP (ha-mcp) adapter config — copy to config.toml and fill in.
+[ha-mcp]
+enabled = true
+license = "MIT"
+ha_url = "http://homeassistant.local:8123"
+ha_token = "REPLACE_WITH_LONG_LIVED_TOKEN"
+read_only = true

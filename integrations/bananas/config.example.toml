@@ -1,0 +1,4 @@
+# Bananas adapter config — copy to config.toml and fill in.
+[bananas]
+enabled = true
+license = "MIT"

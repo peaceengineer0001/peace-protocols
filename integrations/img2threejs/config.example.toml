@@ -1,0 +1,4 @@
+# img2threejs adapter config — copy to config.toml and fill in.
+[img2threejs]
+enabled = true
+license = "Apache-2.0"

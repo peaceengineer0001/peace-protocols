@@ -72,6 +72,16 @@ config/privacy-tiers.toml
 user-data/
 canvases/
 
+# Live integration configs generated from the .example.toml templates
+# (only the *.example.toml scaffolds are tracked).
+integrations/*/config.toml
+mcp_bus/*.toml
+
+# ===== Packaging / build artifacts =====
+*.egg
+pip-wheel-metadata/
+.tox/
+
 # ===== Auto-generated document previews =====
 # We keep only source .md and the whitepaper/*.pdf documents.
 # Ignore auto-generated preview exports of markdown files.

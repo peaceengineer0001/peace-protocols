@@ -1,0 +1,4 @@
+# Marketing Agent Framework adapter config — copy to config.toml and fill in.
+[marketing-agent]
+enabled = true
+license = "Apache-2.0"

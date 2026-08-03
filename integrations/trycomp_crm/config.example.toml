@@ -1,0 +1,5 @@
+# TryComp AI CRM adapter config — copy to config.toml and fill in.
+[trycomp-crm]
+enabled = true
+license = "MIT"
+endpoint = "http://127.0.0.1:8641"

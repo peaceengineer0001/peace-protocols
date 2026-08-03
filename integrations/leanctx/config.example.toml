@@ -1,0 +1,4 @@
+# LeanCTX adapter config — copy to config.toml and fill in.
+[leanctx]
+enabled = true
+license = "Apache-2.0"

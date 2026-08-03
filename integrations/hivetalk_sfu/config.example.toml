@@ -1,0 +1,5 @@
+# HiveTalk SFU adapter config — copy to config.toml and fill in.
+[hivetalk-sfu]
+enabled = true
+license = "AGPL-3.0"
+endpoint = "http://127.0.0.1:8644"

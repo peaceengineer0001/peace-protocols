@@ -1,0 +1,4 @@
+# Ego-Lite adapter config — copy to config.toml and fill in.
+[ego-lite]
+enabled = true
+license = "MIT"

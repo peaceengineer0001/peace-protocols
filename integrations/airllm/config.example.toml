@@ -1,0 +1,8 @@
+# AirLLM adapter config — copy to config.toml and fill in.
+[airllm]
+enabled = true
+license = "Apache-2.0"
+endpoint = "http://127.0.0.1:8631"
+model = "kimi-k3"
+compression = "mxfp4"
+prefetch = true

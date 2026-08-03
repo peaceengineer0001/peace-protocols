@@ -151,3 +151,59 @@ This is the software realization of the whitepaper's **"7,777 without hierarchy"
 - **Trust:** sovereignty-conscious users can diff our overlay against upstream Buzz and verify exactly what Peace Protocols adds.
 
 See [`.gitmodules`](.gitmodules) for the Buzz submodule pin, and [ARCHITECTURE decisions in the whitepaper](whitepaper/Peace_Protocols.pdf) for the full rationale.
+
+
+
+---
+
+## 7. v2 — Agent Capability Layer & Unified MCP Bus
+
+v2 **extends** (does not replace) the overlay architecture above. Two things are
+added:
+
+### 7.1 Agent Zero capability layer
+A new capability layer built on a fork of **Agent Zero** is inserted between the
+client UI and the Buzz relay. It contributes a Docker-sandboxed XFCE Linux
+desktop, Chromium browser automation with DOM annotation, LibreOffice document
+co-working, and multi-agent delegation. Crucially, it speaks the **same MCP
+interface** the overlay already uses, so Buzz remains the substrate (identity,
+transport, relay runtime, audit) while Agent Zero adds capability. This is why
+both statements are true: *Peace Protocols is a Buzz overlay* **and** *v2 forks
+Agent Zero* — they operate at different layers.
+
+```
+ Client UI
+    │
+ Agent Zero capability layer   (sandboxed desktop, browser, docs, delegation)
+    │  ── Unified MCP Bus ──►   22 integration MCP servers
+ Buzz / Nostr relay            (substrate: identity, transport, audit, workspace)
+```
+
+### 7.2 Unified MCP Bus (`mcp_bus/`)
+A hub-and-spoke bus. Agent Zero is the central MCP client; each integration is
+an independent MCP server (6 native + 17 adapters). The
+[`MCPConnectionPool`](mcp_bus/pool.py) provides:
+
+- **concurrent** startup of all enabled servers,
+- **health monitoring** with exponential-backoff **auto-reconnection**,
+- **fault isolation** — a failing integration is contained,
+- **routing** — `find_tool` / `call_tool` dispatch to the owning server,
+- **license & consent gating** — non-commercial servers (GHOST) are skipped
+  under a commercial deployment; consent-gated servers (Heretic) stay down until
+  explicit, logged consent.
+
+The registry is declared in
+[`config/mcp_servers.yaml`](config/mcp_servers.yaml) and parsed by
+[`mcp_bus/registry.py`](mcp_bus/registry.py).
+
+### 7.3 New Nostr kinds
+v2 introduces kind `30106` (audit events, incl. Heretic consent) and `30110`
+(email bridge), extending the v1 range `30100–30105`.
+
+### 7.4 Inference routing
+**AirLLM is the primary inference backend** (weight/expert streaming); cloud
+APIs are fallback only. Context is compressed through **LeanCTX** (60–90% token
+reduction) before reaching any model, preserving both sovereignty and cost.
+
+See [docs/v2-upgrade.md](docs/v2-upgrade.md) for the full v2 design, honest
+implementation status, and the multi-OS deployment matrix.

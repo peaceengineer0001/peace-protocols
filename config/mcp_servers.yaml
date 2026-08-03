@@ -1,0 +1,236 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Peace Protocols — Unified MCP Bus registry (v2)
+# ─────────────────────────────────────────────────────────────────────────────
+# This file declares every MCP server the Agent Zero capability layer connects
+# to. The `mcp_bus` package (mcp_bus/registry.py) parses it into typed specs and
+# the connection pool (mcp_bus/pool.py) brings them up concurrently with health
+# monitoring and automatic reconnection.
+#
+# transport:
+#   native   -> the upstream project ships its own MCP server; we launch/point to it
+#   adapter  -> upstream exposes HTTP/REST/CLI/gRPC; we wrap it (integrations/<n>/adapter.py)
+# protocol:  stdio | http | websocket | sse
+#
+# NOTE: All commands/urls below are the *reference* wiring. They require the
+#       upstream service to be installed/running (see each integrations/<name>/README.md).
+#       Values are read from the live config/*.toml and environment at runtime.
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: 2
+
+defaults:
+  health_interval_seconds: 15
+  max_backoff_seconds: 60
+  # AirLLM is the PRIMARY inference backend; cloud APIs are fallback only.
+  primary_inference: airllm
+
+servers:
+
+  # ── Pillar 1: Massive Local Inference ─────────────────────────────────────
+  airllm:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8631/v1"
+    adapter: integrations.airllm.adapter
+    license: Apache-2.0
+    tags: [inference, primary, local]
+    description: >-
+      Layer/expert weight-streaming inference (Kimi K3 2.8T on ~3.72GB VRAM).
+      OpenAI-compatible endpoint; primary reasoning backend for all agents.
+
+  # ── Pillar 2: Advanced Agent Capabilities ────────────────────────────────
+  agency-agents:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.agency_agents.adapter
+    license: MIT
+    tags: [agents, personalities]
+    description: Imported specialist personalities as Agent Zero templates.
+
+  voxcpm:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8632/v1"
+    adapter: integrations.voxcpm.adapter
+    license: Apache-2.0
+    tags: [voice, tts]
+    description: VoxCPM2 tokenizer-free TTS (voice design / cloning), 30 languages.
+
+  speech-to-speech:
+    transport: adapter
+    protocol: websocket
+    url: "ws://127.0.0.1:8633/v1/realtime"
+    adapter: integrations.speech_to_speech.adapter
+    license: Apache-2.0
+    tags: [voice, realtime, stt, tts]
+    description: VAD->STT->LLM->TTS pipeline, OpenAI Realtime-compatible.
+
+  scrapling:
+    transport: native
+    protocol: stdio
+    command: "scrapling mcp serve"
+    license: BSD-3-Clause
+    tags: [web, scraping, mcp-native]
+    description: Adaptive self-healing scraper with built-in token-reducing MCP server.
+
+  opencodereview:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.opencodereview.adapter
+    command: "ocr review --mcp"
+    license: Apache-2.0
+    tags: [code-quality, dev]
+    description: Alibaba automated code review (static Go binary) wrapped as MCP tool.
+
+  ego-lite:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.ego_lite.adapter
+    license: MIT
+    tags: [browser, automation]
+    description: Shared-session Chromium/CDP browser preserving user login state.
+
+  leanctx:
+    transport: native
+    protocol: stdio
+    command: "leanctx mcp"
+    license: Apache-2.0
+    tags: [context, optimization, mcp-native]
+    description: 82-tool context engineering layer; 60-90% token reduction.
+
+  worldmonitor:
+    transport: native
+    protocol: sse
+    url: "https://worldmonitor.app/mcp"
+    license: AGPL-3.0
+    tags: [intel, situational-awareness, mcp-native]
+    description: 500+ feeds / 65+ providers global intelligence dashboard MCP.
+
+  ha-mcp:
+    transport: native
+    protocol: stdio
+    command: "ha-mcp serve"
+    license: MIT
+    tags: [smart-home, mcp-native]
+    env:
+      HA_URL: "${HOME_ASSISTANT_URL}"
+      HA_TOKEN: "${HOME_ASSISTANT_TOKEN}"
+    description: 87-tool Home Assistant control (read-only mode available).
+
+  # ── Pillar 3: Intelligence, Media, Commerce (v2.2 expansion) ──────────────
+  osiris:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8640"
+    adapter: integrations.osiris.adapter
+    license: MIT
+    tags: [osint, intel]
+    description: Palantir-style 14-domain OSINT platform + RECON toolkit (SSRF-guarded).
+
+  trycomp-crm:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8641"
+    adapter: integrations.trycomp_crm.adapter
+    license: MIT
+    tags: [crm, relationships]
+    description: Agentic-first CRM; durable research agent writes observed facts only.
+
+  ghost:
+    transport: native
+    protocol: http
+    url: "http://127.0.0.1:8642/mcp"
+    license: CC-BY-NC-SA-4.0
+    commercial_use: false        # NON-COMMERCIAL — bus skips this under commercial deployment
+    tags: [osint, investigation, mcp-native, non-commercial]
+    description: OSINT case management; ~86 MCP tools auto-generated from OpenAPI.
+
+  heretic:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.heretic.adapter
+    license: AGPL-3.0
+    enabled: false               # opt-in only
+    consent_required: true       # explicit user consent before any abliteration run
+    tags: [model-tools, alignment, consent-gated]
+    description: Automatic directional-ablation (decensoring) of local models. OFF by default.
+
+  videoagent:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8643"
+    adapter: integrations.videoagent.adapter
+    license: MIT
+    tags: [media, video]
+    description: Agentic video understanding / editing / generation (HKUDS).
+
+  bananas:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.bananas.adapter
+    license: MIT
+    tags: [collaboration, screen-share]
+    description: P2P multi-cursor screen sharing launcher/control (Electron/WebRTC).
+
+  hivetalk-sfu:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8644"
+    adapter: integrations.hivetalk_sfu.adapter
+    license: AGPL-3.0
+    tags: [video-conf, nostr, lightning]
+    description: Nostr-native WebRTC SFU conferencing with Lightning micropayments.
+
+  longcat-video:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8645"
+    adapter: integrations.longcat_video.adapter
+    license: MIT
+    tags: [media, video-gen, gpu]
+    description: 13.6B DiT long-form text/image-to-video generation + avatars.
+
+  cadam:
+    transport: adapter
+    protocol: http
+    url: "http://127.0.0.1:8646"
+    adapter: integrations.cadam.adapter
+    license: GPL-3.0
+    tags: [cad, 3d, gpl]
+    description: Text/image-to-CAD (OpenSCAD/WASM); STL/SCAD/DXF export.
+
+  img2threejs:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.img2threejs.adapter
+    license: Apache-2.0
+    tags: [3d, reconstruction]
+    description: Image -> procedural Three.js/TypeScript model (staged sculpting pipeline).
+
+  shopstr:
+    transport: native
+    protocol: stdio
+    command: "shopstr-mcp"
+    license: GPL-3.0
+    tags: [commerce, nostr, lightning, mcp-native, gpl]
+    description: Nostr Bitcoin marketplace (Lightning / on-chain / Cashu). MCP package.
+
+  lnd:
+    transport: adapter
+    protocol: http
+    url: "https://127.0.0.1:8080"   # LND REST
+    adapter: integrations.lnd.adapter
+    license: MIT
+    tags: [lightning, payments, bitcoin]
+    env:
+      LND_MACAROON_PATH: "${LND_MACAROON_PATH}"
+      LND_TLS_CERT_PATH: "${LND_TLS_CERT_PATH}"
+    description: Lightning Network Daemon; payment rails for Shopstr & community treasury.
+
+  marketing-agent:
+    transport: adapter
+    protocol: stdio
+    adapter: integrations.marketing_agent.adapter
+    license: Apache-2.0
+    tags: [marketing, skills]
+    description: Fletcher-Method marketing skills orchestrating CRM/OSINT/media/Nostr.

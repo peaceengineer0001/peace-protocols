@@ -1,0 +1,5 @@
+# VideoAgent adapter config — copy to config.toml and fill in.
+[videoagent]
+enabled = true
+license = "MIT"
+endpoint = "http://127.0.0.1:8643"

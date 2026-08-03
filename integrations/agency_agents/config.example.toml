@@ -1,0 +1,4 @@
+# Agency Agents adapter config — copy to config.toml and fill in.
+[agency-agents]
+enabled = true
+license = "MIT"

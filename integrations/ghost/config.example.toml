@@ -1,0 +1,6 @@
+# GHOST OSINT-CRM adapter config — copy to config.toml and fill in.
+[ghost]
+enabled = true
+license = "CC-BY-NC-SA-4.0"
+# ⚠ CC BY-NC-SA 4.0 — NON-COMMERCIAL use only. Disabled under commercial deployment.
+commercial_use = false

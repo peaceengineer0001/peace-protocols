@@ -1,0 +1,4 @@
+# Alibaba OpenCodeReview adapter config — copy to config.toml and fill in.
+[opencodereview]
+enabled = true
+license = "Apache-2.0"

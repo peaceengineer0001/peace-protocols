@@ -156,6 +156,50 @@ See **[ARCHITECTURE.md](ARCHITECTURE.md)** for the full technical design.
 
 ---
 
+## ⚡ v2 Upgrade — Agent Capability Layer & 22 Integrations
+
+The **v2 upgrade** (branch `feature/v2-upgrades`) layers an **Agent Zero
+capability layer** on top of the Buzz substrate and connects **22 upstream
+capabilities** through a new **Unified MCP Bus**:
+
+- 🧠 **Massive local inference** — [AirLLM](integrations/airllm/) is the
+  **primary** backend (frontier models on consumer GPUs); cloud APIs are
+  fallback only.
+- 🗣️ **Voice** — [VoxCPM](integrations/voxcpm/) TTS +
+  [Speech-to-Speech](integrations/speech_to_speech/) realtime pipeline.
+- 🕸️ **Web & context** — [Scrapling](integrations/scrapling/),
+  [LeanCTX](integrations/leanctx/) (60–90% token reduction),
+  [Ego-Lite](integrations/ego_lite/), [OpenCodeReview](integrations/opencodereview/).
+- 🌐 **Situational awareness** — [World Monitor](integrations/worldmonitor/),
+  [OSIRIS](integrations/osiris/), [ha-mcp](integrations/ha_mcp/) smart home.
+- 🎬 **Media & design** — [VideoAgent](integrations/videoagent/),
+  [LongCat-Video](integrations/longcat_video/), [CADAM](integrations/cadam/),
+  [img2threejs](integrations/img2threejs/), [HiveTalk SFU](integrations/hivetalk_sfu/),
+  [Bananas](integrations/bananas/).
+- 💸 **Community economy** — [Shopstr](integrations/shopstr/) +
+  [LND](integrations/lnd/) Nostr Bitcoin commerce.
+- 🖥️ **Multi-OS** — reference **NixOS "PeaceOS"** (`nixos/`), **Windows 11**
+  (`platforms/windows/`), and **macOS Homebrew tap** (`platforms/macos/`).
+
+The bus (`mcp_bus/`) provides concurrent connections, health monitoring,
+auto-reconnection, fault isolation, and **license/consent gating**
+(GHOST is non-commercial; Heretic is consent-gated and off by default).
+
+> 🚧 The 22 integrations ship as **production-shaped scaffolds** — adapter
+> contract, config, and bus registration are in place and unit-tested; live
+> tool calls require the upstream service to be installed/running. See
+> **[docs/v2-upgrade.md](docs/v2-upgrade.md)**, **[integrations/README.md](integrations/README.md)**,
+> and **[docs/LICENSE-COMPLIANCE.md](docs/LICENSE-COMPLIANCE.md)**.
+
+```bash
+pip install pyyaml pytest
+python3 scripts/validate_mcp_registry.py   # validate the 23-server registry
+python3 -m mcp_bus.serve --once            # bring the bus up, print health
+python3 -m pytest tests/ -v                # bus unit tests (8/8)
+```
+
+---
+
 ## 📄 Whitepaper & Documents
 
 The foundational documents live in **[whitepaper/](whitepaper/)**:

@@ -1,0 +1,4 @@
+# Upstream install is out-of-band; see README.md.
+# Adapter runtime deps:
+websockets>=12.0
+pyyaml>=6.0

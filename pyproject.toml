@@ -1,0 +1,74 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Peace Protocols — Python packaging (v2)
+# ─────────────────────────────────────────────────────────────────────────────
+# Enables `pip install -e .` so the mcp_bus, integrations, and math packages are
+# importable across the repo (tests, scripts, the dashboard, and downstream tools).
+# ─────────────────────────────────────────────────────────────────────────────
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "peace-protocols"
+version = "2.0.0"
+description = "Peace Protocols — Buzz overlay with Agent Zero capability layer and a Unified MCP Bus integrating 22 services."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Raven Rolland Gregg", email = "raven@peaceengineers.org" },
+]
+keywords = ["peace-protocols", "mcp", "agent-zero", "nostr", "buzz", "sovereignty"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "tomli>=2.0.1 ; python_version < '3.11'",
+    "httpx>=0.27.0",
+    "websockets>=12.0",
+    "pydantic>=2.6.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/peaceengineer0001/peace-protocols"
+Repository = "https://github.com/peaceengineer0001/peace-protocols.git"
+Documentation = "https://github.com/peaceengineer0001/peace-protocols/tree/main/docs"
+
+[project.scripts]
+peace-mcp-bus = "mcp_bus.serve:main"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# setuptools package discovery
+# ─────────────────────────────────────────────────────────────────────────────
+[tool.setuptools]
+packages = ["mcp_bus", "integrations", "math"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.toml", "*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
